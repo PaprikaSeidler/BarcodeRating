@@ -1,4 +1,4 @@
-﻿namespace ProductLib
+﻿namespace ProductLib.Models
 {
     public class Product
     {
