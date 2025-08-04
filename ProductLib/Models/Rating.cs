@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProductLib.Models
+namespace BarcodeRatingLib.Models
 {
     public class Rating
     {

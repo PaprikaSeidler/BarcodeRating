@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProductLib\ProductLib.csproj" />
+    <ProjectReference Include="..\ProductLib\BarcodeRatingLib.csproj" />
   </ItemGroup>
 
   <ItemGroup>

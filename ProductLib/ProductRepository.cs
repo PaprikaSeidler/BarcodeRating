@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProductLib.Models;
+using BarcodeRatingLib.Models;
 
 
-namespace ProductLib
+namespace BarcodeRatingLib
 {
     public class ProductRepository
     {

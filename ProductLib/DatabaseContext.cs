@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductLib.Models;
+using BarcodeRatingLib.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProductLib
+namespace BarcodeRatingLib
 {
     public class DatabaseContext : DbContext
     {

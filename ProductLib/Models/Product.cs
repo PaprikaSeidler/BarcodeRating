@@ -1,10 +1,13 @@
-﻿namespace ProductLib.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BarcodeRatingLib.Models
 {
     public class Product
     {
         private int _barcode;
         private string _category;
 
+        [Key]
         public int Barcode
         {
             get => _barcode;
@@ -12,7 +15,7 @@
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentException("Barcode must be a positive integer.");
+                    throw new ArgumentOutOfRangeException("Barcode must be a positive integer.");
                 }
                 _barcode = value;
             }
@@ -41,11 +44,11 @@
 
         public Product(Product copy) 
         {
-            _barcode = copy._barcode;
+            Barcode = copy._barcode;
             Name = copy.Name;
             ImageUrl = copy.ImageUrl;
             Brand = copy.Brand;
-            _category = copy._category;
+            Category = copy._category;
         }
 
         public override string ToString()
