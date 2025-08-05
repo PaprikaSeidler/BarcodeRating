@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>BarcodeRating</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="header">
+            <h1>Barcode Rating</h1>
+            <p>Scan products, save ratings</p>
+        </div>
+
+        <div class="container mt-4 mb-5">
+            <div class="card p-4 mb-4">
+                <div class="section-title">Input Barcode</div>
+
+                <div class="form-group">
+                    <label for="barcode">Barcode:</label>
+                    <input type="text" id="barcode" v-model="barcode" class="form-control"
+                        placeholder="E.g. 1234567890123">
+                </div>
+
+                <div class="row mt-3 mb-3">
+                <div class="col-md-6">
+                    <button @click="fetchProductInfo" class="btn btn-primary mr-2" data-toggle="modal" data-target="#productModal">
+          <i class="bi bi-search"></i> Hent info
+        </button>
+
+                    <button @click="submitBarcode" class="btn btn-success">
+                        <i class="bi bi-star-fill"></i> Save Rating
+                    </button>
+                </div>
+                <div class="col-md-6" align="right">
+                    <button @click="fetchAllProducts" class="btn btn-secondary">
+                        <i class="bi bi-plus"></i> click to add manual entry
+                    </button>
+                </div>
+            </div>
+
+              <!-- Modal -->
+  <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="productModalLabel">Produkt information</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Luk">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" v-if="productInfo && productInfo.product">
+          <h5>{{ productInfo.product.product_name }}</h5>
+          <p><strong>Brand:</strong> {{ productInfo.product.brands }}</p>
+          <img
+            v-if="productInfo.product.image_url"
+            :src="productInfo.product.image_url"
+            class="img-thumbnail mt-2 mb-3"
+            style="max-width: 200px;"
+          >
+
+          <div>
+            <label><strong>Your rating:</strong></label>
+            <div>
+              <i
+                v-for="star in 5"
+                :key="star"
+                class="bi"
+                :class="star <= rating ? 'bi-star-fill text-warning' : 'bi-star'"
+                style="font-size: 1.5rem; cursor: pointer;"
+                @click="setRating(star)"
+              ></i>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Luk</button>
+          <button type="button" class="btn btn-success" @click="submitBarcode" data-dismiss="modal">
+            <i class="bi bi-check-circle"></i> Save rating
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+            <div v-if="error" class="alert alert-danger">
+                {{ error }}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script src="index.js"></script>
+</body>
+
+</html>

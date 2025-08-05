@@ -1,0 +1,157 @@
+body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fdfcfa;
+      color: #333;
+    }
+
+    .header {
+      background: #f1e8e6;
+      padding: 40px 0;
+      text-align: center;
+      border-bottom: 1px solid #e0d1cd;
+    }
+
+    .header h1 {
+      font-weight: 600;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      color: #5a4b48;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      color: #7b6d69;
+    }
+
+    .container {
+      max-width: 720px;
+    }
+
+    .card {
+      border-radius: 12px;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      background-color: #fff;
+    }
+
+    .form-control {
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .btn {
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      background-color: #b68c87;
+      border-color: #b68c87;
+    }
+
+    .btn-primary:hover {
+      background-color: #a47872;
+      border-color: #a47872;
+    }
+
+    .btn-success {
+      background-color: #9bbca8;
+      border-color: #9bbca8;
+      color: #fff;
+    }
+
+    .btn-success:hover {
+      background-color: #85aa94;
+      border-color: #85aa94;
+    }
+
+    .btn-secondary {
+      background-color: #c3b4af;
+      border-color: #d1c6c2;
+      color: #fff;
+    }
+
+    .btn-secondary:hover {
+      background-color: #b8a9a4;
+      border-color: #b8a9a4;
+    }
+
+    .img-thumbnail {
+      border-radius: 10px;
+    }
+
+    .section-title {
+      font-weight: 600;
+      font-size: 1.3rem;
+      color: #5a4b48;
+      margin-bottom: 15px;
+    }
+
+    /* Modal baggrund (semi-transparent mørk rosa i stedet for sort) */
+.modal-backdrop.show {
+    background-color: rgba(90, 75, 72, 0.5);
+}
+
+/* Modal container */
+.modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    background-color: #fdfcfa; /* lys beige/rosa baggrund */
+    color: #4b2e4d;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Modal header */
+.modal-header {
+    border-bottom: 1px solid #e0d1cd;
+    background-color: #f1e8e6;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+
+/* Modal title */
+.modal-title {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #5a4b48;
+}
+
+/* Close button */
+.modal-header .close {
+    color: #4b2e4d;
+    font-size: 1.5rem;
+    opacity: 0.7;
+}
+.modal-header .close:hover {
+    opacity: 1;
+}
+
+/* Modal body */
+.modal-body {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+/* Modal footer */
+.modal-footer {
+    border-top: 1px solid #eee;
+    background-color: #f8f5f4;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+
+/* Stjerner */
+.modal-body .bi {
+    transition: color 0.2s ease;
+}
+.modal-body .bi-star {
+    color: #ccc;
+}
+.modal-body .bi-star-fill {
+    color: #f7b731;
+}
+.modal-body .bi:hover {
+    transform: scale(1.1);
+}
