@@ -1,4 +1,4 @@
-# 🏷️ Barcode Lookup (Practice Project)
+# 🏷️ Barcode Rating
 
 This is a personal project made for fun and learning purposes. It allows users to search for products by barcode and view basic product info such as name, brand, and image.
 
