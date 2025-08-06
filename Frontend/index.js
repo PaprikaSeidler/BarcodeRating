@@ -8,6 +8,7 @@ Vue.createApp({
       productInfo: null,
       error: null,
       rating: 0,
+      products: [],
       newProduct: {
         barcode: '',
         name: '',
@@ -28,8 +29,10 @@ Vue.createApp({
         this.error = null;
         const response = await axios.get(barcodeRatingUrl);
         console.log('All products:', response.data);
+        this.products = response.data;
       } catch (error) {
         console.error('Error fetching all products:', error);
+        this.products = [];
       }
     },
     async fetchProductInfo() {
@@ -96,15 +99,14 @@ Vue.createApp({
         alert('Product added successfully!');
         this.newProduct = { barcode: '', name: '', category: '', brand: '', imageUrl: '' };
         
-        // Close the modal after successful add
         $('#newProductModal').modal('hide');
+        this.getAllProducts(); 
       } catch (error) {
         console.error('Error adding new product:', error);
         this.error = 'Failed to add new product';
       }
     },
 
-    // Fill form with OpenFoodFacts data - user still needs to select category and submit manually
     addProductFromOpenFood() {
       if (!this.productInfo || !this.productInfo.product) {
         this.error = 'No product information available to add';
@@ -112,17 +114,14 @@ Vue.createApp({
       }
 
       const product = this.productInfo.product;
-      
-      // Pre-fill the form with OpenFoodFacts data
       this.newProduct = {
-        barcode: this.barcode.trim(), // Use the barcode from input field
+        barcode: this.barcode.trim(),
         name: product.product_name,
-        category: '', // User must select this manually (Proteinbar or Coffee capsule)
+        category: '', 
         brand: product.brands || '',
         imageUrl: product.image_url || ''
       };
 
-      // Open the manual product modal so user can select category and submit
       $('#newProductModal').modal('show');
       this.error = null;
     },
@@ -133,6 +132,22 @@ Vue.createApp({
 
     fetchAllProducts() {
       $('#newProductModal').modal('show');
+    },
+
+    async deleteProduct(barcode) {
+      if (!confirm('Are you sure you want to delete this product?')) {
+        return;
+      }
+      
+      try {
+        this.error = null;
+        await axios.delete(`${barcodeRatingUrl}/${barcode}`);
+        alert('Product deleted successfully!');
+        this.getAllProducts();
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        this.error = 'Failed to delete product';
+      }
     }
   }
 }).mount('#app');

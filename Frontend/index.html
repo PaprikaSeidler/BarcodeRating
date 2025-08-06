@@ -22,7 +22,7 @@
 
     <div class="container mt-4 mb-5">
       <div class="card p-4 mb-4">
-        <div class="section-title">Input Barcode</div>
+        <div class="section-title">Add new product</div>
 
         <div class="form-group">
           <label for="barcode">Barcode:</label>
@@ -30,21 +30,17 @@
         </div>
 
         <div class="row mt-3 mb-3">
-          <div class="col-md-6">
-            <button @click="fetchProductInfo" class="btn btn-primary mr-2" data-toggle="modal"
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <button @click="fetchProductInfo" class="btn btn-primary btn-block mb-2" data-toggle="modal"
               data-target="#productModal">
-              <i class="bi bi-search"></i> Hent info
-            </button>
-
-            <button @click="submitBarcode" class="btn btn-success">
-              <i class="bi bi-star-fill"></i> Save Rating
+              <i class="bi bi-search"></i> Get info
             </button>
           </div>
-          <div class="col-md-6" align="right">
-            <button @click="fetchAllProducts" class="btn btn-secondary">
-              <i class="bi bi-plus"></i> click to add manual entry
-            </button>
-          </div>
+        </div>
+        <div align="right">
+          <a @click="fetchAllProducts" class="">
+            <i class="bi bi-plus"></i> Couldn't find product? Click to add manual entry
+          </a>
         </div>
 
         <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
@@ -99,7 +95,8 @@
                 <form @submit.prevent="addNewProduct">
                   <div class="form-group">
                     <label for="newProductBarcode">Barcode:</label>
-                    <input type="text" id="newProductBarcode" v-model="newProduct.barcode" class="form-control" required>
+                    <input type="text" id="newProductBarcode" v-model="newProduct.barcode" class="form-control"
+                      required>
                   </div>
                   <div class="form-group">
                     <label for="newProductName">Produkt name:</label>
@@ -128,17 +125,67 @@
           </div>
         </div>
 
-      <div v-if="error" class="alert alert-danger">
-        {{ error }}
+        <div v-if="error" class="alert alert-danger">
+          {{ error }}
+        </div>
       </div>
     </div>
-  </div>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="container">
+      <div class="card p-4">
+        <div class="section-title">Your Products</div>
+        <div v-if="!products || products.length === 0" class="text-center text-muted py-4">No products found</div>
+        <div v-else>
+          <div v-for="product in products" :key="product.barcode" class="card mb-3">
+            <div class="card-body">
+              <div class="row align-items-center">
 
 
-  <script src="index.js"></script>
+                <div class="col-12 col-md-8 mb-3 mb-md-0">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="card-title mb-0">{{ product.name }}</h5>
+                    <div class="rating-stars">
+                      <i v-for="star in 5" :key="star" class="bi"
+                        :class="star <= rating ? 'bi-star-fill text-warning' : 'bi-star'"
+                        style="font-size: 1.2rem; cursor: pointer;" @click="setRating(star)">
+                      </i>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
+                    <img v-if="product.imageUrl" :src="product.imageUrl" class="img-thumbnail"
+                      style="max-width: 150px; max-height: 150px; object-fit: cover;">
+                  </div>
+                  <div class="row">
+                    <div class="col-6 col-sm-4">
+                      <strong>Brand:</strong><br>
+                      <span class="text-muted">{{ product.brand || 'N/A' }}</span>
+                    </div>
+                    <div class="col-6 col-sm-4">
+                      <strong>Category:</strong><br>
+                      <span class="text-muted">{{ product.category }}</span>
+                    </div>
+                    <div class="col-12 col-sm-4 mt-2 mt-sm-0">
+                      <strong>Barcode:</strong><br>
+                      <small class="text-muted">{{ product.barcode }}</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-2 text-center text-md-right">
+                  <a class="danger" @click="deleteProduct(product.barcode)">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="index.js"></script>
 </body>
 
 </html>

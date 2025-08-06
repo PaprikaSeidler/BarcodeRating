@@ -77,6 +77,15 @@ body {
       border-color: #b8a9a4;
     }
 
+    .danger {
+      color: #e57373;
+      box-shadow: #a47872;
+    }
+    .danger:hover {
+      color: #ab1a1a;
+      box-shadow: #a47872;
+    }
+
     .img-thumbnail {
       border-radius: 10px;
     }
