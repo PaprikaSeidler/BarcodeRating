@@ -31,12 +31,12 @@ namespace BarcodeRatingLib
             return product;
         }
 
-        public Product? GetByBarcode(int barcode)
+        public Product? GetByBarcode(long barcode)
         {
             return _context.Products.FirstOrDefault(p => p.Barcode == barcode);
         }
 
-        public Product? Delete(int barcode)
+        public Product? Delete(long barcode)
         {
             Product? product = GetByBarcode(barcode);
             if (product != null)

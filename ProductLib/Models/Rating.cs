@@ -13,7 +13,7 @@ namespace BarcodeRatingLib.Models
         private string? _user;
 
         public int Id { get; set; }
-        public int ProductBarcode { get; set; }
+        public long ProductBarcode { get; set; }
         public int Score
         {
             get => _score;

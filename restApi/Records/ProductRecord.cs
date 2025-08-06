@@ -2,7 +2,7 @@
 
 namespace restApi.Records
 {
-    public record ProductRecord(int? Barcode, string? Name, string? ImageUrl, string? Brand, string? Category);
+    public record ProductRecord(long Barcode, string? Name, string? ImageUrl, string? Brand, string Category);
 
     public static class ProductRecordHelper
     {
@@ -18,7 +18,7 @@ namespace restApi.Records
             }
             return new Product()
             {
-                Barcode = (int)record.Barcode,
+                Barcode = record.Barcode,
                 Name = record.Name,
                 ImageUrl = record.ImageUrl,
                 Brand = record.Brand,

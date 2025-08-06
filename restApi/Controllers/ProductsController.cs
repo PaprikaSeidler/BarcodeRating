@@ -39,7 +39,7 @@ namespace restApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         // GET api/<ProductsController>/12334556
         [HttpGet("{barcode}")]
-        public ActionResult<Product> Get(int barcode)
+        public ActionResult<Product> Get(long barcode)
         {
             Product? product = _productRepository.GetByBarcode(barcode);
             if (product != null)
@@ -79,7 +79,7 @@ namespace restApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         // DELETE api/<ProductsController>/5
         [HttpDelete("{barcode}")]
-        public ActionResult<Product> Delete(int barcode)
+        public ActionResult<Product> Delete(long barcode)
         {
             Product? deleted = _productRepository.Delete(barcode);
             if (deleted != null)

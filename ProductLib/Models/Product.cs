@@ -4,11 +4,11 @@ namespace BarcodeRatingLib.Models
 {
     public class Product
     {
-        private int _barcode;
+        private long _barcode;
         private string _category;
 
         [Key]
-        public int Barcode
+        public long Barcode
         {
             get => _barcode;
             set

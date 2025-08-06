@@ -7,7 +7,14 @@ Vue.createApp({
       barcode: '',
       productInfo: null,
       error: null,
-      loading: false
+      rating: 0,
+      newProduct: {
+        barcode: '',
+        name: '',
+        category: '',
+        brand: '',
+        imageUrl: ''
+      }
     };
   },
 
@@ -18,7 +25,6 @@ Vue.createApp({
   methods: {
     async getAllProducts() {
       try {
-        this.loading = true;
         this.error = null;
         const response = await axios.get(barcodeRatingUrl);
         console.log('All products:', response.data);
@@ -33,7 +39,6 @@ Vue.createApp({
       }
       
       try {
-        this.loading = true;
         this.error = null;
         this.productInfo = null;
         
@@ -47,8 +52,6 @@ Vue.createApp({
       } catch (error) {
         console.error('Error fetching product info:', error);
         this.error = 'Failed to fetch product information';
-      } finally {
-        this.loading = false;
       }
     },
     async submitBarcode() {
@@ -58,7 +61,6 @@ Vue.createApp({
       }
       
       try {
-        this.loading = true;
         this.error = null;
         
         const response = await axios.post(barcodeRatingUrl, { 
@@ -77,9 +79,60 @@ Vue.createApp({
         } else {
           this.error = 'An unexpected error occurred';
         }
-      } finally {
-        this.loading = false;
       }
+    },
+
+    async addNewProduct() {
+      if (!this.newProduct.barcode || !this.newProduct.name) {
+        this.error = 'Please fill in all required fields';
+        return;
+      }
+
+      try {
+        this.error = null;
+
+        const response = await axios.post(barcodeRatingUrl, this.newProduct);
+        console.log('New product added:', response.data);
+        alert('Product added successfully!');
+        this.newProduct = { barcode: '', name: '', category: '', brand: '', imageUrl: '' };
+        
+        // Close the modal after successful add
+        $('#newProductModal').modal('hide');
+      } catch (error) {
+        console.error('Error adding new product:', error);
+        this.error = 'Failed to add new product';
+      }
+    },
+
+    // Fill form with OpenFoodFacts data - user still needs to select category and submit manually
+    addProductFromOpenFood() {
+      if (!this.productInfo || !this.productInfo.product) {
+        this.error = 'No product information available to add';
+        return;
+      }
+
+      const product = this.productInfo.product;
+      
+      // Pre-fill the form with OpenFoodFacts data
+      this.newProduct = {
+        barcode: this.barcode.trim(), // Use the barcode from input field
+        name: product.product_name,
+        category: '', // User must select this manually (Proteinbar or Coffee capsule)
+        brand: product.brands || '',
+        imageUrl: product.image_url || ''
+      };
+
+      // Open the manual product modal so user can select category and submit
+      $('#newProductModal').modal('show');
+      this.error = null;
+    },
+
+    setRating(stars) {
+      this.rating = stars;
+    },
+
+    fetchAllProducts() {
+      $('#newProductModal').modal('show');
     }
   }
 }).mount('#app');
