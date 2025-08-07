@@ -20,7 +20,7 @@
       <p>Scan products, save ratings</p>
     </div>
 
-    <div class="container mt-4 mb-5">
+    <div class="container mt-2 mb-5">
       <div class="card p-4 mb-4">
         <div class="section-title">Add new product</div>
 
@@ -53,28 +53,15 @@
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body" v-if="productInfo && productInfo.product">
+              <div class="modal-body" align="center" v-if="productInfo && productInfo.product">
                 <h5>{{ productInfo.product.product_name }}</h5>
                 <p><strong>Brand:</strong> {{ productInfo.product.brands }}</p>
-                <img v-if="productInfo.product.image_url" :src="productInfo.product.image_url"
-                  class="img-thumbnail mt-2 mb-3" style="max-width: 200px;">
+                <img v-if="productInfo.product.image_url" :src="productInfo.product.image_url" class="img-thumbnail mt-2 mb-3" style="max-width: 200px;">
 
-                <div>
-                  <label><strong>Your rating:</strong></label>
-                  <div>
-                    <i v-for="star in 5" :key="star" class="bi"
-                      :class="star <= rating ? 'bi-star-fill text-warning' : 'bi-star'"
-                      style="font-size: 1.5rem; cursor: pointer;" @click="setRating(star)"></i>
-                  </div>
-                </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-info" @click="addProductFromOpenFood" data-dismiss="modal">
-                  <i class="bi bi-plus-circle"></i> Add to Database
-                </button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Luk</button>
-                <button type="button" class="btn btn-success" @click="submitBarcode" data-dismiss="modal">
-                  <i class="bi bi-check-circle"></i> Save rating
+                <button type="button" class="btn btn-success" @click="addProductFromOpenFood" data-dismiss="modal">
+                  <i class="bi bi-plus-circle"></i> Add to 'Your Products'
                 </button>
               </div>
             </div>
@@ -132,11 +119,23 @@
     </div>
 
     <div class="container">
-      <div class="card p-4">
+      <div class="card p-2 mb-4">
         <div class="section-title">Your Products</div>
-        <div v-if="!products || products.length === 0" class="text-center text-muted py-4">No products found</div>
+        <div class="d-flex align-items-center">
+          <select v-model="selectedCategory" class="form-control m-2">
+            <option value="">All Categories</option>
+            <option value="Proteinbar">Proteinbar</option>
+            <option value="Coffee capsule">Coffee capsule</option>
+          </select>
+          <input type="text" v-model="searchQuery" class="form-control m-2" placeholder="Search products...">
+          <button class="btn btn-secondary" @click="sortByRating">
+            <i class="bi bi-sort-down"></i>
+          </button>
+        </div>
+
+        <div v-if="!filteredProducts || filteredProducts.length === 0" class="text-center text-muted py-4">No products found</div>
         <div v-else>
-          <div v-for="product in products" :key="product.barcode" class="card mb-3">
+          <div v-for="product in filteredProducts" :key="product.barcode" class="card mb-5">
             <div class="card-body">
               <div class="row align-items-center">
 
@@ -145,10 +144,7 @@
                   <div class="d-flex justify-content-between align-items-center mb-2">
                     <h5 class="card-title mb-0">{{ product.name }}</h5>
                     <div class="rating-stars">
-                      <i v-for="star in 5" :key="star" class="bi"
-                        :class="star <= rating ? 'bi-star-fill text-warning' : 'bi-star'"
-                        style="font-size: 1.2rem; cursor: pointer;" @click="setRating(star)">
-                      </i>
+                      {Show average rating <i class="bi bi-star"></i>}
                     </div>
                   </div>
                   <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
@@ -172,7 +168,10 @@
                 </div>
 
                 <div class="col-12 col-md-2 text-center text-md-right">
-                  <a class="danger" @click="deleteProduct(product.barcode)">
+                  <button class="btn btn-success mr-5" @click="rateProduct(product)">
+                    <i class="bi bi-star"></i> Give rating
+                  </button>
+                  <a class="btn btn-danger" @click="deleteProduct(product.barcode)">
                     <i class="bi bi-trash"></i>
                   </a>
                 </div>
@@ -183,6 +182,9 @@
       </div>
     </div>
 
+
+
+  </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="index.js"></script>

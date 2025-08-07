@@ -9,6 +9,8 @@ Vue.createApp({
       error: null,
       rating: 0,
       products: [],
+      searchQuery: '',
+      selectedCategory: '',
       newProduct: {
         barcode: '',
         name: '',
@@ -148,6 +150,21 @@ Vue.createApp({
         console.error('Error deleting product:', error);
         this.error = 'Failed to delete product';
       }
+    },
+
+  },
+  computed: {
+    filteredProducts() {
+      return this.products.filter(product => {
+        const matchesCategory = !this.selectedCategory || product.category === this.selectedCategory;
+        const matchesSearch = !this.searchQuery || product.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+        return matchesCategory && matchesSearch;
+      });
+    },
+    sortByRating() {
+      return this.filteredProducts.slice().sort((a, b) => {
+        return (b.rating || 0) - (a.rating || 0);
+      });
     }
-  }
+  },
 }).mount('#app');
