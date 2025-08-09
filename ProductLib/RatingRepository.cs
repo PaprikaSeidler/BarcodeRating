@@ -19,7 +19,7 @@ namespace BarcodeRatingLib
         public List<Rating> GetAll()
         {
             return _context.Ratings
-                .OrderByDescending(r => r.Date)
+                .OrderByDescending(r => r.RatingDate)
                 .ToList();
         }
 
@@ -28,11 +28,11 @@ namespace BarcodeRatingLib
             return _context.Ratings.FirstOrDefault(r => r.Id == id);
         }
 
-        public List<Rating> GetByProductBarcode(int barcode)
+        public List<Rating> GetByProductBarcode(long barcode)
         {
             return _context.Ratings
                 .Where(r => r.ProductBarcode == barcode)
-                .OrderByDescending(r => r.Date)
+                .OrderByDescending(r => r.RatingDate)
                 .ToList();
         }
 
@@ -61,7 +61,7 @@ namespace BarcodeRatingLib
             {
                 existing.Score = updated.Score;
                 existing.Comment = updated.Comment;
-                existing.Date = updated.Date;
+                existing.RatingDate = updated.RatingDate;
                 existing.User = updated.User;
                 existing.ProductBarcode = updated.ProductBarcode;
 

@@ -22,15 +22,6 @@ namespace BarcodeRatingLib.Tests
         }
 
         [TestMethod()]
-        public void RatingDateTest()
-        {
-            Rating rating = new Rating();
-            rating.Date = DateTime.Now;
-            Assert.AreEqual(DateTime.Now.Date, rating.Date.Date);
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => rating.Date = DateTime.Now.AddDays(1), "Date cannot be in the future.");
-        }
-
-        [TestMethod()]
         public void RatingUserTest()
         {
             Rating rating = new Rating();
@@ -50,7 +41,7 @@ namespace BarcodeRatingLib.Tests
                 ProductBarcode = 1234567890,
                 Score = 5,
                 Comment = "Excellent product!",
-                Date = DateTime.Now,
+                RatingDate = DateOnly.FromDateTime(DateTime.Now),
                 User = "TestUser"
             };
             Rating copy = new Rating(original);
@@ -58,7 +49,7 @@ namespace BarcodeRatingLib.Tests
             Assert.AreEqual(original.ProductBarcode, copy.ProductBarcode);
             Assert.AreEqual(original.Score, copy.Score);
             Assert.AreEqual(original.Comment, copy.Comment);
-            Assert.AreEqual(original.Date.Date, copy.Date.Date);
+            Assert.AreEqual(original.RatingDate, copy.RatingDate);
             Assert.AreEqual(original.User, copy.User);
         }
     }

@@ -15,9 +15,9 @@ namespace BarcodeRatingLib.Tests
         public void ProductBarcodeTest()
         {
             Product product = new Product();
-            product.Barcode = 1234567890;
-            Assert.AreEqual(1234567890, product.Barcode);
-            Assert.ThrowsException<ArgumentException>(() => product.Barcode = -1, "Barcode must be a positive integer.");
+            product.Barcode = 123456789000;
+            Assert.AreEqual(123456789000, product.Barcode);
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => product.Barcode = -1, "Barcode must be a positive integer.");
         }
 
         [TestMethod()]

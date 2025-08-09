@@ -9,7 +9,7 @@ namespace BarcodeRatingLib.Models
     public class Rating
     {
         public int _score;
-        private DateTime _date;
+        private DateOnly _ratingDate;
         private string? _user;
 
         public int Id { get; set; }
@@ -27,18 +27,7 @@ namespace BarcodeRatingLib.Models
             }
         }
         public string? Comment { get; set; }
-        public DateTime Date
-        {
-            get => _date;
-            set
-            {
-                if (value > DateTime.Now)
-                {
-                    throw new ArgumentOutOfRangeException("Date cannot be in the future.");
-                }
-                _date = value;
-            }
-        }
+        public DateOnly RatingDate { get; set; }
         public string User
         {
             get => _user;
@@ -66,13 +55,13 @@ namespace BarcodeRatingLib.Models
             ProductBarcode = copy.ProductBarcode;
             Score = copy.Score;
             Comment = copy.Comment;
-            Date = copy.Date;
+            RatingDate = copy.RatingDate;
             User = copy.User;
         }
 
         public override string ToString()
         {
-            return $"Score: {Score}, Comment: {Comment}, Date: {Date.ToShortDateString()}, User: {User}";
+            return $"Score: {Score}, Comment: {Comment}, Date: {RatingDate.ToShortDateString()}, User: {User}";
         }
     }
 }

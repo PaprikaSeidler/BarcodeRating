@@ -17,7 +17,7 @@
   <div id="app">
     <div class="header">
       <h1>Barcode Rating</h1>
-      <p>Scan products, save ratings</p>
+      <p>Scan products, submit ratings</p>
     </div>
 
     <div class="container mt-2 mb-5">
@@ -56,7 +56,8 @@
               <div class="modal-body" align="center" v-if="productInfo && productInfo.product">
                 <h5>{{ productInfo.product.product_name }}</h5>
                 <p><strong>Brand:</strong> {{ productInfo.product.brands }}</p>
-                <img v-if="productInfo.product.image_url" :src="productInfo.product.image_url" class="img-thumbnail mt-2 mb-3" style="max-width: 200px;">
+                <img v-if="productInfo.product.image_url" :src="productInfo.product.image_url"
+                  class="img-thumbnail mt-2 mb-3" style="max-width: 200px;">
 
               </div>
               <div class="modal-footer">
@@ -119,7 +120,7 @@
     </div>
 
     <div class="container">
-      <div class="card p-2 mb-4">
+      <div class="card p-4 mb-4">
         <div class="section-title">Your Products</div>
         <div class="d-flex align-items-center">
           <select v-model="selectedCategory" class="form-control m-2">
@@ -133,7 +134,8 @@
           </button>
         </div>
 
-        <div v-if="!filteredProducts || filteredProducts.length === 0" class="text-center text-muted py-4">No products found</div>
+        <div v-if="!filteredProducts || filteredProducts.length === 0" class="text-center text-muted py-4">No products
+          found</div>
         <div v-else>
           <div v-for="product in filteredProducts" :key="product.barcode" class="card mb-3">
             <div class="card-body">
@@ -144,7 +146,10 @@
                   <div class="d-flex justify-content-between align-items-center mb-2">
                     <h5 class="card-title mb-0">{{ product.name }}</h5>
                     <div class="rating-stars">
-                      {Show average rating <i class="bi bi-star"></i>}
+                      <span v-for="star in 5" :key="star" style="color: #ffc107; font-size: 18px;">
+                        <i :class="star <= getAverageRating(product.barcode) ? 'bi bi-star-fill' : 'bi bi-star'"></i>
+                      </span>
+                      <small class="text-muted ml-2">({{ getAverageRating(product.barcode).toFixed(1) }})</small>
                     </div>
                   </div>
                   <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
@@ -168,9 +173,10 @@
                 </div>
 
                 <div class="col-12 col-md-2 text-center text-md-right">
-                  <button class="btn btn-success mr-3" @click="rateProduct(product)">
+                  <button class="btn btn-success mr-3" @click="prepareRating(product.barcode)" data-toggle="modal" data-target="#ratingModal">
                     <i class="bi bi-star"></i> Give rating
                   </button>
+
                   <a class="btn btn-danger" @click="deleteProduct(product.barcode)">
                     <i class="bi bi-trash"></i>
                   </a>
@@ -182,12 +188,83 @@
       </div>
     </div>
 
+    <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ratingModalLabel">Give Product Rating</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="productBarcode">Product Barcode:</label>
+              <input type="text" id="productBarcode" v-model="newRating.productBarcode" class="form-control" readonly>
+            </div>
+            <div class="form-group">
+              <label for="ratingDate">Rating Date:</label>
+              <input type="text" id="ratingDate" v-model="newRating.ratingDate" class="form-control" readonly>
+            </div>
+
+            <div class="form-group">
+              <label for="score">Score:</label>
+              <select id="score" v-model="newRating.score" class="form-control" required>
+                <option value="">Select score</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="comment">Comment:</label>
+              <textarea id="comment" v-model="newRating.comment" class="form-control" rows="3"
+                placeholder="Write your comment..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="user">User:</label>
+              <input type="text" id="user" v-model="newRating.user" class="form-control" required minlength="3"
+                maxlength="15" placeholder="Your username">
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" @click="submitRating()">Submit Rating</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!--     <button type="button" class="close" data-dismiss="modal" aria-label="Luk">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" align="center" v-if="productInfo && productInfo.product">
+    <h5>{{ productInfo.product.product_name }}</h5>
+    <p><strong>Brand:</strong> {{ productInfo.product.brands }}</p>
+    <img v-if="productInfo.product.image_url" :src="productInfo.product.image_url" class="img-thumbnail mt-2 mb-3"
+      style="max-width: 200px;">
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" @click="addProductFromOpenFood" data-dismiss="modal">
+      <i class="bi bi-plus-circle"></i> Add to 'Your Products'
+    </button>
+  </div>
+  </div>
+  </div>
+  </div> -->
 
 
   </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="index.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="index.js"></script>
 </body>
 
 </html>
