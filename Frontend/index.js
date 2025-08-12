@@ -15,6 +15,7 @@ Vue.createApp({
       selectedCategory: '',
       newProduct: { barcode: '', name: '', category: '', brand: '', imageUrl: '' },
       newRating: { productBarcode: '', score: 0, comment: '', ratingDate: '', user: '' },
+      showRatings: {},
     };
   },
 
@@ -34,6 +35,12 @@ Vue.createApp({
         console.error('Error fetching all products:', error);
         this.products = [];
       }
+    },
+    getProductRatings(barcode) {
+      return this.ratings.filter(r => r.productBarcode === barcode);
+    },
+    toggleRatings(barcode) {
+      this.showRatings = { ...this.showRatings, [barcode]: !this.showRatings[barcode] };
     },
     async fetchProductInfo() {
       if (!this.barcode.trim()) {
@@ -210,20 +217,15 @@ Vue.createApp({
         return matchesCategory && matchesSearch;
       });
     },
-    sortByRating() {
-      return this.filteredProducts.slice().sort((a, b) => {
-        return (b.rating || 0) - (a.rating || 0);
-      });
-    },
 
     getAverageRating() {
       return (barcode) => {
-        const productRatings = this.ratings.filter(rating => 
+        const productRatings = this.ratings.filter(rating =>
           rating.productBarcode == barcode
         );
-        
+
         if (productRatings.length === 0) return 0;
-        
+
         const total = productRatings.reduce((sum, rating) => sum + rating.score, 0);
         return Math.round((total / productRatings.length) * 10) / 10;
       };

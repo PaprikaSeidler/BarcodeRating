@@ -39,79 +39,11 @@
         </div>
         <div align="right">
           <a @click="fetchAllProducts" class="">
-            <i class="bi bi-plus"></i> Couldn't find product? Click to add manual entry
+            Couldn't find product? Click to add manual entry
           </a>
         </div>
 
-        <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel">Produkt information</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Luk">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body" align="center" v-if="productInfo && productInfo.product">
-                <h5>{{ productInfo.product.product_name }}</h5>
-                <p><strong>Brand:</strong> {{ productInfo.product.brands }}</p>
-                <img v-if="productInfo.product.image_url" :src="productInfo.product.image_url"
-                  class="img-thumbnail mt-2 mb-3" style="max-width: 200px;">
 
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-success" @click="addProductFromOpenFood" data-dismiss="modal">
-                  <i class="bi bi-plus-circle"></i> Add to 'Your Products'
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal fade" id="newProductModal" tabindex="-1" role="dialog" aria-labelledby="newProductModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="newProductModalLabel">Ny Produkt</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Luk">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form @submit.prevent="addNewProduct">
-                  <div class="form-group">
-                    <label for="newProductBarcode">Barcode:</label>
-                    <input type="text" id="newProductBarcode" v-model="newProduct.barcode" class="form-control"
-                      required>
-                  </div>
-                  <div class="form-group">
-                    <label for="newProductName">Produkt name:</label>
-                    <input type="text" id="newProductName" v-model="newProduct.name" class="form-control" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="newProductBrand">Brand:</label>
-                    <input type="text" id="newProductBrand" v-model="newProduct.brand" class="form-control" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="newProductCategory">Category:</label>
-                    <select id="newProductCategory" v-model="newProduct.category" class="form-control" required>
-                      <option value="" disabled selected>Select category</option>
-                      <option value="Proteinbar">Proteinbar</option>
-                      <option value="Coffee capsule">Coffee capsule</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="newProductImage">Image url:</label>
-                    <input type="text" id="newProductImage" v-model="newProduct.imageUrl" class="form-control">
-                  </div>
-                  <button type="submit" class="btn btn-primary">Add Produkt</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
 
         <div v-if="error" class="alert alert-danger">
           {{ error }}
@@ -129,57 +61,120 @@
             <option value="Coffee capsule">Coffee capsule</option>
           </select>
           <input type="text" v-model="searchQuery" class="form-control m-2" placeholder="Search products...">
-          <button class="btn btn-secondary" @click="sortByRating">
-            <i class="bi bi-sort-down"></i>
-          </button>
         </div>
 
-        <div v-if="!filteredProducts || filteredProducts.length === 0" class="text-center text-muted py-4">No products
-          found</div>
+        <div v-if="!filteredProducts || filteredProducts.length === 0" class="text-center text-muted py-4">
+          No productsfound
+        </div>
         <div v-else>
-          <div v-for="product in filteredProducts" :key="product.barcode" class="card mb-3">
-            <div class="card-body">
-              <div class="row align-items-center">
+          <div v-for="product in filteredProducts" :key="product.barcode" class="card mb-3 shadow-sm">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-12 col-md-3 mb-3 mb-md-0 text-center">
+                  <img v-if="product.imageUrl" :src="product.imageUrl" class="img-thumbnail rounded"
+                    style="max-width: 120px; max-height: 120px; object-fit: cover;">
+                  <div v-else class="bg-light rounded d-flex align-items-center justify-content-center"
+                    style="width: 120px; height: 120px; margin: 0 auto;">
+                    <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
+                  </div>
+                </div>
 
-
-                <div class="col-12 col-md-8 mb-3 mb-md-0">
-                  <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h5 class="card-title mb-0">{{ product.name }}</h5>
-                    <div class="rating-stars">
-                      <span v-for="star in 5" :key="star" style="color: #ffc107; font-size: 18px;">
+                <div class="col-12 col-md-6 mb-3 mb-md-0">
+                  <div class="mb-2">
+                    <h5 class="card-title mb-1">{{ product.name }}</h5>
+                    <div class="rating-stars d-flex align-items-center">
+                      <span v-for="star in 5" :key="star" style="color: #ffc107; font-size: 16px;">
                         <i :class="star <= getAverageRating(product.barcode) ? 'bi bi-star-fill' : 'bi bi-star'"></i>
                       </span>
                       <small class="text-muted ml-2">({{ getAverageRating(product.barcode).toFixed(1) }})</small>
                     </div>
                   </div>
-                  <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
-                    <img v-if="product.imageUrl" :src="product.imageUrl" class="img-thumbnail"
-                      style="max-width: 150px; max-height: 150px; object-fit: cover;">
-                  </div>
                   <div class="row">
-                    <div class="col-6 col-sm-4">
-                      <strong>Brand:</strong><br>
-                      <span class="text-muted">{{ product.brand || 'N/A' }}</span>
+                    <div class="col-6 col-lg-4 mb-2">
+                      <small class="text-muted d-block">Brand</small>
+                      <span class="font-weight-medium">{{ product.brand || 'N/A' }}</span>
                     </div>
-                    <div class="col-6 col-sm-4">
-                      <strong>Category:</strong><br>
-                      <span class="text-muted">{{ product.category }}</span>
+                    <div class="col-6 col-lg-4 mb-2">
+                      <small class="text-muted d-block">Category</small>
+                      <span class="font-weight-medium">{{ product.category }}</span>
                     </div>
-                    <div class="col-12 col-sm-4 mt-2 mt-sm-0">
-                      <strong>Barcode:</strong><br>
-                      <small class="text-muted">{{ product.barcode }}</small>
+                    <div class="col-12 col-lg-4">
+                      <small class="text-muted d-block">Barcode</small>
+                      <small class="text-monospace">{{ product.barcode }}</small>
                     </div>
                   </div>
                 </div>
 
-                <div class="col-12 col-md-2 text-center text-md-right">
-                  <button class="btn btn-success mr-3" @click="prepareRating(product.barcode)" data-toggle="modal" data-target="#ratingModal">
-                    <i class="bi bi-star"></i> Give rating
-                  </button>
+                <div class="col-12 col-md-3">
+                  <div class="d-flex d-md-block">
+                    <button class="btn btn-success btn-sm flex-fill mr-2 mr-md-0 mb-md-3"
+                      @click="prepareRating(product.barcode)" data-toggle="modal" data-target="#ratingModal">
+                      <i class="bi bi-star"></i>
+                      <span>Rate</span>
+                    </button>
 
-                  <a class="btn btn-danger" @click="deleteProduct(product.barcode)">
-                    <i class="bi bi-trash"></i>
-                  </a>
+                    <button class="btn btn-info btn-sm flex-fill mr-2 mr-md-0 mb-md-3"
+                      @click="toggleRatings(product.barcode)">
+                      <i class="bi bi-eye"></i>
+                      <span>{{ showRatings && showRatings[product.barcode] ? 'Hide' : 'View' }}</span>
+                    </button>
+
+                    <div class="dropdown">
+                      <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button"
+                        data-toggle="dropdown">
+                        <i class="bi bi-three-dots"></i>
+                        <span class="ml-1">More</span>
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item text-danger" href="#" @click="deleteProduct(product.barcode)">
+                          <i class="bi bi-trash"></i> Delete Product
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div v-if="showRatings && showRatings[product.barcode]" class="mt-3">
+                <div class="card border-light bg-light">
+                  <div class="card-header py-2">
+                    <h6 class="mb-0 text-muted">
+                      <i class="bi bi-chat-dots"></i>
+                      Product Ratings ({{ getProductRatings(product.barcode).length }})
+                    </h6>
+                  </div>
+                  <div class="card-body p-3">
+                    <div v-if="getProductRatings(product.barcode).length === 0" class="text-center text-muted py-2">
+                      <i class="bi bi-star"></i> No ratings yet
+                    </div>
+                    <div v-else>
+                      <div v-for="rating in getProductRatings(product.barcode)" :key="rating.id"
+                        class="rating-item p-2 mb-2 border rounded">
+                        <div class="d-flex justify-content-between align-items-start">
+                          <div class="flex-grow-1">
+                            <div class="rating-stars mb-1">
+                              <span v-for="star in 5" :key="star" style="color: #ffc107; font-size: 14px;">
+                                <i :class="star <= rating.score ? 'bi bi-star-fill' : 'bi bi-star'"></i>
+                              </span>
+                              <small class="text-muted ml-1">({{ rating.score }}/5)</small>
+                            </div>
+                            <p v-if="rating.comment" class="mb-1 text-dark" style="font-size: 0.9rem;">
+                              "{{ rating.comment }}"
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <small class="text-muted">
+                                <i class="bi bi-person-circle"></i> {{ rating.user }}
+                              </small>
+                              <small class="text-muted">
+                                <i class="bi bi-calendar3"></i> {{ new
+                                Date(rating.ratingDate).toLocaleDateString('da-DK') }}
+                              </small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -188,6 +183,78 @@
       </div>
     </div>
 
+    <!-- product info modal -->
+    <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="productModalLabel">Produkt information</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Luk">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" align="center" v-if="productInfo && productInfo.product">
+            <h5>{{ productInfo.product.product_name }}</h5>
+            <p><strong>Brand:</strong> {{ productInfo.product.brands }}</p>
+            <img v-if="productInfo.product.image_url" :src="productInfo.product.image_url"
+              class="img-thumbnail mt-2 mb-3" style="max-width: 200px;">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" @click="addProductFromOpenFood" data-dismiss="modal">
+              <i class="bi bi-plus-circle"></i> Add to 'Your Products'
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--new product modal-->
+    <div class="modal fade" id="newProductModal" tabindex="-1" role="dialog" aria-labelledby="newProductModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="newProductModalLabel">Ny Produkt</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Luk">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form @submit.prevent="addNewProduct">
+              <div class="form-group">
+                <label for="newProductBarcode">Barcode:</label>
+                <input type="text" id="newProductBarcode" v-model="newProduct.barcode" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="newProductName">Produkt name:</label>
+                <input type="text" id="newProductName" v-model="newProduct.name" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="newProductBrand">Brand:</label>
+                <input type="text" id="newProductBrand" v-model="newProduct.brand" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="newProductCategory">Category:</label>
+                <select id="newProductCategory" v-model="newProduct.category" class="form-control" required>
+                  <option value="" disabled selected>Select category</option>
+                  <option value="Proteinbar">Proteinbar</option>
+                  <option value="Coffee capsule">Coffee capsule</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="newProductImage">Image url:</label>
+                <input type="text" id="newProductImage" v-model="newProduct.imageUrl" class="form-control">
+              </div>
+              <button type="submit" class="btn btn-primary">Add Produkt</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- rating modal -->
     <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel"
       aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -239,26 +306,6 @@
         </div>
       </div>
     </div>
-
-<!--     <button type="button" class="close" data-dismiss="modal" aria-label="Luk">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body" align="center" v-if="productInfo && productInfo.product">
-    <h5>{{ productInfo.product.product_name }}</h5>
-    <p><strong>Brand:</strong> {{ productInfo.product.brands }}</p>
-    <img v-if="productInfo.product.image_url" :src="productInfo.product.image_url" class="img-thumbnail mt-2 mb-3"
-      style="max-width: 200px;">
-
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-success" @click="addProductFromOpenFood" data-dismiss="modal">
-      <i class="bi bi-plus-circle"></i> Add to 'Your Products'
-    </button>
-  </div>
-  </div>
-  </div>
-  </div> -->
 
 
   </div>
